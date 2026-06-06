@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@media print {
+  /* I-hide lahat */
+  body * {
+    visibility: hidden;
+  }
+
+  /* I-show lang yung receipt */
+  #receipt, #receipt * {
+    visibility: visible;
+  }
+
+  /* I-position yung receipt sa taas */
+  #receipt {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
