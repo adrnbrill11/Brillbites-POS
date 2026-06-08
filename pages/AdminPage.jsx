@@ -6,25 +6,19 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api"
 
 export default function AdminPage() {
-  const { transactions, clearTransactions } = useTransactionStore();
-  const [ transaction, setTransaction ] = useState([]);
+  
+  const [ transactions, setTransaction ] = useState([]);
   const [ loading, setLoading ] = useState(true);
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
-  useEffect (() => {
-    async function fetchOrders(){
-      try{
-        const response = await api.get("/orders")
-        setTransaction(response.data.orders)
-      } catch(error){
-        console.error("Failed to fetch orders:", error)
-      }finally{
-         setLoading(false)
-      }
-    }
-    fetchOrders()
-  }, []) 
+ useEffect(() => {
+  async function fetchOrders() {
+    const response = await api.get("/orders")
+    setTransactions(response.data.orders)
+  }
+  fetchOrders()
+}, [])
 
 
 
