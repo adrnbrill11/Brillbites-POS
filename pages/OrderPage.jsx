@@ -28,12 +28,14 @@ export default function OrderPage() {
         </div>
 
         <div className="flex gap-2">
-          <button
-            onClick={() => navigate("/admin")}
-            className="rounded-lg text-heading bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5"
-          >
-            Admin
-          </button>
+          {user?.role === "ADMIN" && (
+            <button
+              onClick={() => navigate("/admin")}
+              className="rounded-lg text-heading bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-base text-sm px-4 py-2.5 text-center leading-5"
+            >
+              Admin
+            </button>
+          )}
 
           <button
             onClick={handleLogout}

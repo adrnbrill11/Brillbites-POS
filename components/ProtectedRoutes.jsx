@@ -8,7 +8,7 @@ export default function ProtectRoutes({ children, adminOnly = false }) {
     return <Navigate to="/login" />;
   }
 
-  if (adminOnly && user.role !== "owner") {
+  if (adminOnly && user.role !== "ADMIN") {
     return <Navigate to="/" />;
   }
   return children

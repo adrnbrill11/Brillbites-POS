@@ -1,18 +1,26 @@
-import { create } from "zustand" 
+import { create } from "zustand";
+import api from "../api/api";
 
-const useAuthStore = create ((set) => ({
-    user: JSON.parse(localStorage.getItem("user")) || null,
-    isLoggedIn: !!localStorage.getItem("user"),
+const useAuthStore = create((set) => ({
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  isLoggedIn: !!localStorage.getItem("user"),
 
-    login: (userData) => {
-        localStorage.setItem("user", JSON.stringify(userData))
-        set({user: userData, isLoggedIn: true})
-    },
+  login: async (email, password) => {
+    const response = await api.post("/auth/login", { email, password });
+    const userData = { ...response.data.user, token: response.data.token };
 
-    logout: () => {
-        localStorage.removeItem("user")
-        set({user: null, isLoggedIn: false})
-    },
-}))
+    localStorage.setItem("user", JSON.stringify(userData));
+    set({ user: userData, isLoggedIn: true });
+  },
 
-export default useAuthStore
+  logout: () => {
+    localStorage.removeItem("user");
+    set({ user: null, isLoggedIn: false });
+  },
+}));
+
+export default useAuthStore;
+
+
+
+

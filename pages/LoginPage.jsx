@@ -3,28 +3,23 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
-  const users = [
-    { username: "admin", password: "admin123", role: "owner" },
-    { username: "cashier", password: "cashier123", role: "cashier" },
-  ];
-
-  const login = useAuthStore(state => state.login)
-
-  function handleLogin() {
-    const user = users.find(
-      (u) => u.username === username && u.password === password
-    );
-
-    if (user) {
-      login(user)
+  async function handleLogin() {
+    try {
+      setLoading(true);
+      setError("");
+      await login(email, password);
       navigate("/");
-    } else {
-      setError("Invalid username or password");
+    } catch (err) {
+      setError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -37,23 +32,30 @@ export default function LoginPage() {
         </div>
 
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
         />
 
-        <input type="password" placeholder="Password" value={password}
-        onChange={e => setPassword(e.target.value)}
-        className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800" />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-800"
+        />
 
-        {error && (
-          <p className="text-red-500 text-xs text-center">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-xs text-center">{error}</p>}
 
-        <button onClick={handleLogin}
-        className="bg-gray-800 text-white rounded-lg py-2 text-sm font-medium hover:bg-gray-700 transition-all">Login</button>
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+          className="bg-gray-800 text-white rounded-lg py-2 text-sm font-medium hover:bg-gray-700 transition-all"
+        >
+           {loading ? "Logging in..." : "Login"}
+        </button>
       </div>
     </div>
   );
