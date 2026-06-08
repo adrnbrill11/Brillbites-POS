@@ -7,7 +7,7 @@ import api from "../api/api"
 
 export default function AdminPage() {
   
-  const [ transactions, setTransaction ] = useState([]);
+  const [ transactions, setTransactions ] = useState([]);
   const [ loading, setLoading ] = useState(true);
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
@@ -165,22 +165,11 @@ export default function AdminPage() {
                     key={index}
                     className="border border-gray-100 text-gray-700"
                   >
-                    <td className="py-2 pr-4">{t.orderNumber}</td>
-                    <td className="py-2 pr-4">{t.date}</td>
-                    <td className="py-2 pr-4">{t.time}</td>
+                    <td className="py-2 pr-4">{t.id}</td>
+                    <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleDateString()}</td>
+                    <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleTimeString()}</td>
                     <td className="py-2 pr-4 text-xs text-gray-400">
-                      {t.items
-                        .map((i) => {
-                          const addOnsText =
-                            i.addOns?.length > 0
-                              ? ` + ${i.addOns
-                                  .map((addOn) => addOn.name)
-                                  .join(", ")}`
-                              : "";
-
-                          return `${i.name}${addOnsText} x${i.quantity}`;
-                        })
-                        .join(", ")}
+                     {t.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
                     </td>
                     <td className="py-2 pr-4">{t.paymentMethod}</td>
                     <td className="py-2 text-right font-medium">
