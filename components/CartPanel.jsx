@@ -1,10 +1,10 @@
 import useCartStore from "../store/cartStore";
 import useTransactionStore from "../store/transactionStore";
 import { useState } from "react";
+import api from "../api/api"
 
 export default function CartPanel() {
-  const { items, removeItem, clearCart, increaseItem, decreaseItem } =
-    useCartStore();
+  const { items, removeItem, clearCart, increaseItem, decreaseItem } = useCartStore();
   const [tendered, setTendered] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const addTransaction = useTransactionStore((state) => state.addTransaction);
@@ -25,28 +25,27 @@ export default function CartPanel() {
 
   //Handle Charge function
 
-  function handleCharge() {
-    const transaction = {
-      orderNumber,
-      date: new Date().toLocaleDateString(),
-      time: new Date().toLocaleTimeString(),
-      items: items.map((i) => ({
+async function handleCharge() {
+  try {
+    await api.post("/orders", {
+      items: items.map(i => ({
         name: i.name,
         quantity: i.quantity,
         price: i.price,
-        addOns: i.addOns || [],
       })),
-      subtotal: parseFloat(subtotal.toFixed(2)),
       total: parseFloat(total.toFixed(2)),
       paymentMethod,
-      tendered: parseFloat(tendered) || 0,
-      change: parseFloat(change.toFixed(2)),
-    };
-    addTransaction(transaction);
-    clearCart();
-    setPaymentMethod("");
-    setTendered("");
+    })
+
+    clearCart()
+    setPaymentMethod("")
+    setTendered("")
+
+  } catch (error) {
+    console.error("Order failed:", error)
+    alert("Order failed! Please try again.")
   }
+}
 
   function printReceipt() {
     window.print();

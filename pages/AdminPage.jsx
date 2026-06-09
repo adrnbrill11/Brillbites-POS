@@ -30,14 +30,17 @@ export default function AdminPage() {
   }
 
   // ✅ Ayos na — walang clearTransactions sa backend pa, so confirm lang
-  function handleClearTransactions() {
-    const clr = confirm("Are you sure you want to clear data?");
-    if (clr) {
-      setTransactions([]); // local clear lang muna
-    } else {
-      console.log("Cancelled");
+ async function handleClearTransactions() {
+  const clr = confirm("Are you sure you want to clear all transactions?")
+  if (clr) {
+    try {
+      await api.delete("/orders")
+      setTransactions([])
+    } catch (error) {
+      console.error("Failed to clear:", error)
     }
   }
+}
 
   // ✅ Fixed field names para match sa backend response
   function exportToExcel() {
@@ -47,7 +50,7 @@ export default function AdminPage() {
       Time: new Date(t.createdAt).toLocaleTimeString(),
       Items: t.items
         .map((i) => {
-          const name = i.product?.name ?? "Unknown";
+          const name = i.name
           return `${name} x${i.quantity}`;
         })
         .join(", "),
@@ -69,7 +72,7 @@ export default function AdminPage() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Admin Panel</h1>
-            <p className="text-sm text-gray-400">Welcome, {user?.username}!</p>
+            <p className="text-sm text-gray-400">Welcome, {user?.name}!</p>
           </div>
           <div className="flex gap-2">
             <button
@@ -95,24 +98,28 @@ export default function AdminPage() {
               {transactions.length}
             </p>
           </div>
+
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="text-xs text-gray-400">Total Sales</p>
             <p className="text-2xl font-bold text-gray-800">
-              ₱{transactions.reduce((sum, t) => sum + t.total, 0).toFixed(2)}
+              ₱{transactions.reduce((sum, t) => sum + parseFloat(t.total), 0).toFixed(2)}
             </p>
           </div>
+
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="text-xs text-gray-400">Average Order</p>
             <p className="text-2xl font-bold text-gray-800">
               ₱{transactions.length > 0
-                ? (transactions.reduce((sum, t) => sum + t.total, 0) / transactions.length).toFixed(2)
+                ? (transactions.reduce((sum, t) => sum + parseFloat(t.total), 0) / transactions.length).toFixed(2)
                 : "0.00"}
             </p>
           </div>
+
         </div>
 
         {/* Transactions Table */}
         <div className="bg-white border border-gray-200 rounded-xl p-4">
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-medium text-gray-800 text-sm">Transactions</h2>
             <div className="flex gap-2">
@@ -122,6 +129,7 @@ export default function AdminPage() {
               >
                 Export to Excel
               </button>
+
               <button
                 onClick={handleClearTransactions}
                 className="bg-red-600 text-white rounded-lg px-3 py-1 text-xs hover:bg-red-500 transition-all"
@@ -164,10 +172,10 @@ export default function AdminPage() {
                       <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleDateString()}</td>
                       <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleTimeString()}</td>
                       <td className="py-2 pr-4 text-xs text-gray-400">
-                        {t.items.map((i) => `${i.product?.name ?? "Unknown"} x${i.quantity}`).join(", ")}
+                        {t.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
                       </td>
                       <td className="py-2 pr-4">{t.paymentMethod}</td>
-                      <td className="py-2 text-right font-medium">₱{t.total.toFixed(2)}</td>
+                      <td className="py-2 text-right font-medium">₱{parseFloat(t.total).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
