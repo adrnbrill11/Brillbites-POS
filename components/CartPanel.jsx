@@ -33,7 +33,7 @@ async function handleCharge() {
         quantity: i.quantity,
         price: i.price,
       })),
-      total: parseFloat(total.toFixed(2)),
+      total: (total.toFixed(2)),
       paymentMethod,
     })
 
