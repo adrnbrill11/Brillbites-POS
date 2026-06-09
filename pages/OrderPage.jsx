@@ -20,7 +20,7 @@ export default function OrderPage() {
     navigate("/login");
   }
 
-  autoLogout(5);
+  autoLogout(10);
 
   return (
     <main className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat p-6">

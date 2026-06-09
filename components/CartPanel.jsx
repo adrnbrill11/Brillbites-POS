@@ -7,7 +7,6 @@ export default function CartPanel() {
   const { items, removeItem, clearCart, increaseItem, decreaseItem } = useCartStore();
   const [tendered, setTendered] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-  const addTransaction = useTransactionStore((state) => state.addTransaction);
 
   //Order Number
   const orderNumber = useTransactionStore(

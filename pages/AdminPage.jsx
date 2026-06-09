@@ -65,7 +65,7 @@ export default function AdminPage() {
     XLSX.writeFile(workBook, "BrillBites_Sales.xlsx");
   }
 
-  autoLogout(1);
+  autoLogout(10);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -171,7 +171,7 @@ export default function AdminPage() {
                 <tbody>
                   {transactions.map((t) => (
                     <tr key={t.id} className="border-b border-gray-100 text-gray-700">
-                      <td className="py-2 pr-4">{t.id}</td>
+                      <td className="py-2 pr-4">#{String(t.id).padStart(3, "0")}</td>
                       <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleDateString()}</td>
                       <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleTimeString()}</td>
                       <td className="py-2 pr-4 text-xs text-gray-400">

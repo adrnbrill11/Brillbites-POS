@@ -21,7 +21,7 @@ export default function autoLogout(minutes = 5){
 
     useEffect(() => {
         if(!isLoggedIn) return
-
+        
         //Actions to reset Timer
         const events = ["mouseclick", "mousemove", "keypress", "scroll", "touchstart"]
         //Add event listener
