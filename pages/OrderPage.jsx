@@ -9,6 +9,7 @@ import HamSandwichSection from "../components/HamSandwichSection";
 import CartPanel from "../components/CartPanel";
 import useAuthStore from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import autoLogout from "../hooks/autoLogout";
 
 export default function OrderPage() {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ export default function OrderPage() {
     logout();
     navigate("/login");
   }
+
+  autoLogout(5);
 
   return (
     <main className="min-h-screen bg-[url('/background.png')] bg-cover bg-center bg-no-repeat p-6">

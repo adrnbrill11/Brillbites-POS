@@ -3,6 +3,7 @@ import useAuthStore from "../store/authStore";
 import * as XLSX from "xlsx";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
+import autoLogout from "../hooks/autoLogout";
 
 export default function AdminPage() {
   const [transactions, setTransactions] = useState([]);
@@ -63,6 +64,8 @@ export default function AdminPage() {
     XLSX.utils.book_append_sheet(workBook, worksheet, "Transactions");
     XLSX.writeFile(workBook, "BrillBites_Sales.xlsx");
   }
+
+  autoLogout(1);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
