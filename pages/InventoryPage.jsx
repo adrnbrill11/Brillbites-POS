@@ -48,8 +48,9 @@ export default function InventoryPage() {
     }
   }
 
-  async function handleDelete() {
+  async function handleDelete(id) {
     if (!confirm("Are you sure?")) return;
+
     try {
       await api.delete(`/products/${id}`);
       fetchProducts();
@@ -199,28 +200,47 @@ export default function InventoryPage() {
 
                 <tbody>
                   {products.map((p) => (
-                    <tr key={p.id} className="border-b border-gray-100 text-gray-700">
+                    <tr
+                      key={p.id}
+                      className="border-b border-gray-100 text-gray-700"
+                    >
                       <td className="py-2 pr-4">{p.name}</td>
                       <td className="py-2 pr-4">{p.category}</td>
-                      <td className="py-2 pr-4">₱{parseFloat(p.price).toFixed(2)}</td>
+                      <td className="py-2 pr-4">
+                        ₱{parseFloat(p.price).toFixed(2)}
+                      </td>
                       <td className="py-2 pr-4">{p.stock}</td>
                       <td className="py-2 pr-4">
-                        <span className={`text-xs px-2 py-1 rounded-full ${p.isAvailable ? "bg-green-100 text-green-600" : "bg-red-100 text-red-500"}`}>
-                             {p.isAvailable ? "Available" : "Unavailable"}
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            p.isAvailable
+                              ? "bg-green-100 text-green-600"
+                              : "bg-red-100 text-red-500"
+                          }`}
+                        >
+                          {p.isAvailable ? "Available" : "Unavailable"}
                         </span>
                       </td>
-                    
-                    <td className="py-2 text-right">
-                        <div className="flex gap-2 justify-end">
-                            <button onClick={() => handleEdit(p)} className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50">
-                                Edit
-                            </button>
-                            <button onClick={() => handleDelete(p)} className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50">
-                                Delete
-                            </button>
-                        </div>
-                    </td>
 
+                      <td className="py-2 text-right">
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => handleEdit(p)}
+                            className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50"
+                          >
+                            Edit
+                          </button>
+
+                          {products.map((products) => (
+                            <button
+                              onClick={() => handleDelete(products.id)}
+                              className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50"
+                            >
+                              Delete
+                            </button>
+                          ))}
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
