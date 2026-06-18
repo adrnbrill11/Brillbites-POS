@@ -31,17 +31,17 @@ export default function AdminPage() {
   }
 
   // ✅ Ayos na — walang clearTransactions sa backend pa, so confirm lang
- async function handleClearTransactions() {
-  const clr = confirm("Are you sure you want to clear all transactions?")
-  if (clr) {
-    try {
-      await api.delete("/orders")
-      setTransactions([])
-    } catch (error) {
-      console.error("Failed to clear:", error)
+  async function handleClearTransactions() {
+    const clr = confirm("Are you sure you want to clear all transactions?");
+    if (clr) {
+      try {
+        await api.delete("/orders");
+        setTransactions([]);
+      } catch (error) {
+        console.error("Failed to clear:", error);
+      }
     }
   }
-}
 
   // ✅ Fixed field names para match sa backend response
   function exportToExcel() {
@@ -51,7 +51,7 @@ export default function AdminPage() {
       Time: new Date(t.createdAt).toLocaleTimeString(),
       Items: t.items
         .map((i) => {
-          const name = i.name
+          const name = i.name;
           return `${name} x${i.quantity}`;
         })
         .join(", "),
@@ -70,7 +70,6 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-7xl mx-auto flex flex-col gap-6">
-
         {/* Header */}
         <div className="flex justify-between items-center">
           <div>
@@ -83,6 +82,12 @@ export default function AdminPage() {
               className="border border-gray-300 text-gray-600 rounded-lg px-3 py-1 text-xs hover:bg-gray-100 transition-all"
             >
               POS
+            </button>
+            <button
+              onClick={() => navigate("/inventory")}
+              className="border border-gray-300 text-gray-600 rounded-lg px-3 py-1 text-xs hover:bg-gray-100 transition-all"
+            >
+              Inventory
             </button>
             <button
               onClick={handleLogout}
@@ -105,24 +110,31 @@ export default function AdminPage() {
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="text-xs text-gray-400">Total Sales</p>
             <p className="text-2xl font-bold text-gray-800">
-              ₱{transactions.reduce((sum, t) => sum + parseFloat(t.total), 0).toFixed(2)}
+              ₱
+              {transactions
+                .reduce((sum, t) => sum + parseFloat(t.total), 0)
+                .toFixed(2)}
             </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-4">
             <p className="text-xs text-gray-400">Average Order</p>
             <p className="text-2xl font-bold text-gray-800">
-              ₱{transactions.length > 0
-                ? (transactions.reduce((sum, t) => sum + parseFloat(t.total), 0) / transactions.length).toFixed(2)
+              ₱
+              {transactions.length > 0
+                ? (
+                    transactions.reduce(
+                      (sum, t) => sum + parseFloat(t.total),
+                      0
+                    ) / transactions.length
+                  ).toFixed(2)
                 : "0.00"}
             </p>
           </div>
-
         </div>
 
         {/* Transactions Table */}
         <div className="bg-white border border-gray-200 rounded-xl p-4">
-
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-medium text-gray-800 text-sm">Transactions</h2>
             <div className="flex gap-2">
@@ -170,15 +182,28 @@ export default function AdminPage() {
                 </thead>
                 <tbody>
                   {transactions.map((t) => (
-                    <tr key={t.id} className="border-b border-gray-100 text-gray-700">
-                      <td className="py-2 pr-4">#{String(t.id).padStart(3, "0")}</td>
-                      <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleDateString()}</td>
-                      <td className="py-2 pr-4">{new Date(t.createdAt).toLocaleTimeString()}</td>
+                    <tr
+                      key={t.id}
+                      className="border-b border-gray-100 text-gray-700"
+                    >
+                      <td className="py-2 pr-4">
+                        #{String(t.id).padStart(3, "0")}
+                      </td>
+                      <td className="py-2 pr-4">
+                        {new Date(t.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-2 pr-4">
+                        {new Date(t.createdAt).toLocaleTimeString()}
+                      </td>
                       <td className="py-2 pr-4 text-xs text-gray-400">
-                        {t.items.map((i) => `${i.name} x${i.quantity}`).join(", ")}
+                        {t.items
+                          .map((i) => `${i.name} x${i.quantity}`)
+                          .join(", ")}
                       </td>
                       <td className="py-2 pr-4">{t.paymentMethod}</td>
-                      <td className="py-2 text-right font-medium">₱{parseFloat(t.total).toFixed(2)}</td>
+                      <td className="py-2 text-right font-medium">
+                        ₱{parseFloat(t.total).toFixed(2)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -186,7 +211,6 @@ export default function AdminPage() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

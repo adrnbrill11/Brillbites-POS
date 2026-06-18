@@ -3,6 +3,7 @@ import OrderPage from "../pages/OrderPage";
 import LoginPage from "../pages/LoginPage";
 import AdminPage from "../pages/AdminPage";
 import ProtectedRoutes from "../components/ProtectedRoutes";
+import InventoryPage from "../pages/InventoryPage"
 
 export default function App() {
   return (
@@ -21,6 +22,14 @@ export default function App() {
         element={
           <ProtectedRoutes adminOnly={true}>
             <AdminPage />
+          </ProtectedRoutes>
+        }
+      />
+       <Route
+        path="/inventory"
+        element={
+          <ProtectedRoutes adminOnly={true}>
+            <InventoryPage />
           </ProtectedRoutes>
         }
       />
