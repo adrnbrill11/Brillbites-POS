@@ -81,7 +81,7 @@ export default function InventoryPage() {
 
           <div className="flex gap-2">
             <button
-              onClick={() => navigate = ("/admin")}
+              onClick={() => navigate("/admin")}
               className="border border-gray-300 text-gray-600 rounded-lg px-3 py-1 text-xs hover:bg-gray-100 transition-all"
             >
               Admin
