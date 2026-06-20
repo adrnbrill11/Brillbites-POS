@@ -23,14 +23,16 @@ export default function CartPanel() {
   const change = tendered ? parseFloat(tendered) - total : 0;
 
   //Handle Charge function
-
 async function handleCharge() {
   try {
+    console.log("CHECKOUT ITEMS:", items)
+
     await api.post("/orders", {
       items: items.map(i => ({
+        id: i.id,
         name: i.name,
-        quantity: i.quantity,
-        price: i.price,
+        quantity: Number(i.quantity),
+        price: Number(i.price),
       })),
       total: parseFloat(total.toFixed(2)),
       paymentMethod,
@@ -41,8 +43,8 @@ async function handleCharge() {
     setTendered("")
 
   } catch (error) {
-    console.error("Order failed:", error)
-    alert("Order failed! Please try again.")
+    console.error("Order failed:", error.response?.data || error)
+    alert(error.response?.data?.error || error.response?.data?.message || "Order failed! Please try again.")
   }
 }
 
