@@ -28,7 +28,6 @@ async function handleCharge() {
   try {
     await api.post("/orders", {
       items: items.map(i => ({
-        id: i.id,
         name: i.name,
         quantity: i.quantity,
         price: i.price,
