@@ -14,25 +14,14 @@ export default function InventoryPage() {
     price: "",
     stock: "",
   });
-  
+
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
-
-  
-const payload = {
-  name: form.name,
-  category: form.category,
-  price: Number(form.price),
-  stock: Number(form.stock)
-}
-  
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-
-  
   async function fetchProducts() {
     try {
       const response = await api.get("/products");
@@ -45,6 +34,13 @@ const payload = {
   }
 
   async function handleSubmit() {
+    const payload = {
+      name: form.name,
+      category: form.category,
+      price: Number(form.price),
+      stock: Number(form.stock),
+    };
+
     try {
       if (editProduct) {
         await api.put(`/products/${editProduct.id}`, payload);
