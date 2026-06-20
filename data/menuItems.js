@@ -82,28 +82,7 @@ const menuItems = [
     flavor: "BBQ",
     price: 50,
   },
-  // Large Fries
-  {
-    id: 71,
-    size: "Large",
-    type: "Fries",
-    flavor: "Cheese",
-    price: 75
-  },
-  {
-    id: 72,
-    size: "Large",
-    type: "Fries",
-    flavor: "Sour Cream",
-    price: 75
-  },
-  {
-    id: 73,
-    size: "Large",
-    type: "Fries",
-    flavor: "BBQ",
-    price: 75
-  },
+
 
   // ===== DRINKS =====
 
@@ -635,8 +614,32 @@ const menuItems = [
     price: 15
   },
 
-
+    // Large Fries
+  {
+    id: 84,
+    size: "Large",
+    type: "Fries",
+    flavor: "Cheese",
+    price: 75
+  },
+  {
+    id: 85,
+    size: "Large",
+    type: "Fries",
+    flavor: "Sour Cream",
+    price: 75
+  },
+  {
+    id: 86,
+    size: "Large",
+    type: "Fries",
+    flavor: "BBQ",
+    price: 75
+  },
+  
 ];
+
+
 
 const menuItemsWithNames = menuItems.map((item) => {
   if (item.name) {
@@ -654,22 +657,26 @@ const menuItemsWithNames = menuItems.map((item) => {
     item.type === "Milkshake" ||
     item.type === "Fruit Soda" ||
     item.type === "Frappe"
-
   ) {
     return {
       ...item,
       name: `${item.flavor} ${item.type} ${item.size}`,
     };
+  }
 
-  } else {
-    item.type === "IceCoffee"
+  if (item.type === "IceCoffee") {
+    return {
+      ...item,
+      name: `${item.flavor} Ice Coffee`,
+    };
   }
 
   return {
     ...item,
-    name: `${item.flavor} ${item.type}`,
+    name: `${item.flavor || item.selectedType || item.type}`,
   };
 });
+
 
 
 export default menuItemsWithNames;

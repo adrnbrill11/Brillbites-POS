@@ -14,6 +14,7 @@ export default function InventoryPage() {
     price: "",
     stock: "",
   });
+  
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
 
