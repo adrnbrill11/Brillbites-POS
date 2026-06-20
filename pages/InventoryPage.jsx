@@ -35,8 +35,8 @@ export default function InventoryPage() {
 
   async function handleSubmit() {
     const payload = {
-      name: form.name,
-      category: form.category,
+      name: form.name.trim(),
+      category: form.category.trim(),
       price: Number(form.price),
       stock: Number(form.stock),
     };
@@ -239,14 +239,12 @@ export default function InventoryPage() {
                             Edit
                           </button>
 
-                          {products.map((products) => (
-                            <button
-                              onClick={() => handleDelete(products.id)}
-                              className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50"
-                            >
-                              Delete
-                            </button>
-                          ))}
+                          <button
+                            onClick={() => handleDelete(p.id)}
+                            className="text-xs border border-gray-300 rounded px-2 py-1 hover:bg-gray-50"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </td>
                     </tr>

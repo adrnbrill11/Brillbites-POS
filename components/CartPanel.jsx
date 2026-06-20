@@ -7,6 +7,7 @@ export default function CartPanel() {
   const { items, removeItem, clearCart, increaseItem, decreaseItem } = useCartStore();
   const [tendered, setTendered] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
+  const [isCharging, setIsCharging] = useState(false);
 
   //Order Number
   const orderNumber = useTransactionStore(
@@ -21,10 +22,18 @@ export default function CartPanel() {
   );
   const total = subtotal;
   const change = tendered ? parseFloat(tendered) - total : 0;
+  const isChargeDisabled =
+    isCharging ||
+    items.length === 0 ||
+    !paymentMethod ||
+    (paymentMethod === "Cash" && (!tendered || change < 0));
 
   //Handle Charge function
 async function handleCharge() {
+  if (isChargeDisabled) return
+
   try {
+    setIsCharging(true)
     console.log("CHECKOUT ITEMS:", items)
 
     await api.post("/orders", {
@@ -45,6 +54,8 @@ async function handleCharge() {
   } catch (error) {
     console.error("Order failed:", error.response?.data || error)
     alert(error.response?.data?.error || error.response?.data?.message || "Order failed! Please try again.")
+  } finally {
+    setIsCharging(false)
   }
 }
 
@@ -190,10 +201,10 @@ async function handleCharge() {
 
         <button
           onClick={handleCharge}
-          disabled={!paymentMethod || (paymentMethod === "Cash" && change < 0)}
+          disabled={isChargeDisabled}
           className="flex-1 bg-gray-800 text-white rounded-lg py-2 text-sm font-medium hover:bg-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Charge ₱{total.toFixed(2)}
+          {isCharging ? "Charging..." : `Charge ₱${total.toFixed(2)}`}
         </button>
       </div>
 
